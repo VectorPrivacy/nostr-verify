@@ -20,17 +20,42 @@
 //! individual verifier's.
 //!
 //! Signatures by the same key are merged (their P terms add up to one), which
-//! on the real traffic leaves about a quarter as many P terms as signatures.
+//! on a busy relay's traffic leaves about a quarter as many P terms as
+//! signatures. Parsed keys are cached per [`Verifier`], so an author seen
+//! before skips its square root.
 //!
 //! Field, scalar and group code follow libsecp256k1's representations and
 //! formulas, and the tests check all of it against libsecp256k1 itself.
+//!
+//! ```
+//! use nostr_verify::{SigRef, Verifier};
+//! # let events: Vec<([u8; 32], [u8; 32], [u8; 64])> = Vec::new();
+//! // (pubkey, id, sig) of each event, as bytes.
+//! let sigs: Vec<SigRef> = events.iter().map(|(pubkey, id, sig)| SigRef { pubkey, msg: id, sig }).collect();
+//! let mut verifier = Verifier::new(); // keep one per thread: it holds the key cache
+//! let mut ok = Vec::new();
+//! verifier.verify_batch(&sigs, &mut ok);
+//! assert_eq!(ok.len(), sigs.len()); // one verdict per signature, in order
+//! ```
+//!
+//! Event ids are not checked here: hash each event's NIP-01 serialization and
+//! compare it with its id first, as a one-at-a-time verifier would.
 
+// The arithmetic is public for the differential tests and benchmarks; it is not
+// part of the API and may change in any release.
+#[doc(hidden)]
 pub mod field;
+#[doc(hidden)]
 pub mod group;
+#[doc(hidden)]
 pub mod keys;
+#[doc(hidden)]
 pub mod msm;
+#[doc(hidden)]
 pub mod rng;
+#[doc(hidden)]
 pub mod scalar;
+#[doc(hidden)]
 pub mod sha256;
 
 use group::Affine;

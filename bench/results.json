@@ -1,0 +1,27 @@
+{
+  "note": "µs per signature, median of 21 rounds of `cargo run --release --example batch 21`, 2026-10-28. Batches: new keys every round, so only repeats inside a batch help.",
+  "platforms": {
+    "macos": {
+      "label": "Apple M4 Max",
+      "one_at_a_time": 24.88,
+      "cached_key": 21.21,
+      "batches": {
+        "16":   {"n_keys": 21.80, "8_keys": 15.43, "1_key": 10.19},
+        "64":   {"n_keys": 17.64, "8_keys": 9.46,  "1_key": 8.39},
+        "256":  {"n_keys": 15.32, "8_keys": 7.20,  "1_key": 7.05},
+        "1024": {"n_keys": 13.84, "8_keys": 6.32,  "1_key": 6.18}
+      }
+    },
+    "x86": {
+      "label": "Intel Core i7-6700",
+      "one_at_a_time": 42.13,
+      "cached_key": 36.56,
+      "batches": {
+        "16":   {"n_keys": 34.61, "8_keys": 24.44, "1_key": 15.09},
+        "64":   {"n_keys": 26.32, "8_keys": 13.98, "1_key": 12.36},
+        "256":  {"n_keys": 21.72, "8_keys": 10.49, "1_key": 9.84},
+        "1024": {"n_keys": 19.04, "8_keys": 8.52,  "1_key": 8.43}
+      }
+    }
+  }
+}
