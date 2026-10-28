@@ -1,0 +1,27 @@
+[package]
+name = "nostr-verify"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "MIT"
+description = "BIP-340 Schnorr signatures checked in batches, with a cache of parsed keys: Nostr events verified 2-3x faster"
+repository = "https://github.com/VectorPrivacy/nostr-verify"
+keywords = ["nostr", "schnorr", "bip340", "secp256k1", "batch"]
+categories = ["cryptography"]
+# Not until the owner settles the name and the licence of code first written for the relay.
+publish = false
+
+[dependencies]
+# The version rust-nostr 0.45 links, so an app using both carries one libsecp256k1.
+secp256k1 = { version = "0.30", default-features = false, features = ["std"] }
+# 0.11: ARMv8 SHA-256 and SHA-NI by runtime detection, no asm feature (0.10 hashes in
+# software on aarch64 without it, and its asm breaks Windows builds).
+sha2 = { version = "0.11", default-features = false }
+getrandom = "0.2"
+
+[dev-dependencies]
+num-bigint = "0.4"
+secp256k1 = { version = "0.30", default-features = false, features = ["std", "rand"] }
+
+[profile.release]
+debug = true
